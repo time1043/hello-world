@@ -7,11 +7,11 @@
 
 - 编程语言
 
-  c、c++、c#
+  老牌：c、c++、c# 
 
-  java、scala、kotlin；python
+  老牌：java、scala、kotlin；python
 
-  go、rust
+  新兴：go、rust
   
 - 编程语言的通用性学习
 
@@ -2354,11 +2354,23 @@
 
 
 
+- 参考课程
+
+  [tsinghua 程序设计 (rust)](https://lab.cs.tsinghua.edu.cn/rust/)、[tsinghua 操作系统 (rust)](https://rcore-os.cn/rCore-Tutorial-Book-v3)、[tsinghua 软件工程](https://lab.cs.tsinghua.edu.cn/software-engineering/basic/web/)、[tsinghua 实验物理的大数据方法 (python)](https://hep.tsinghua.edu.cn/~orv/teaching/physics-data/)
+
+  [程序君的 Rust 培训](https://www.bilibili.com/video/BV19b4y1o7Lt/)；[Rust 项目实操 - xdiff](https://www.bilibili.com/video/BV1dG4y167M9/)；[xdiff源码](https://github.com/Tubitv/xdiff)、[Rust 项目实操 - 预订系统](https://www.bilibili.com/video/BV1aV4y1L72b/)；
+  
+  [Learn Rust Programming - Complete Course (freeCodeCamp.org)](https://www.youtube.com/watch?v=BpPEoZW5IiY)、
+  
+  [50 Rust Projects - New Playlist Announcement](https://www.youtube.com/watch?v=qru3L4BvrOU&list=PL5dTjWUk_cPYuhHm9_QImW7_u4lr5d6zO)、[50 源码](https://github.com/AkhilSharma90/Rust-Compress)；
+  
+  [基于rust语言的小项目](https://www.bilibili.com/video/BV1v64y1R7mq/)
+  
 - 参考资料
 
-  [rust程序设计语言](https://www.rustwiki.org.cn/zh-CN/book/foreword.html)、[CS198Rust](http://cis198-2016s.github.io/)、[RustLanguageCheatSheet](https://cheats.rs/)
+  [rust程序设计语言](https://www.rustwiki.org.cn/zh-CN/book/foreword.html)、[CS198Rust](http://cis198-2016s.github.io/)、[RustLanguageCheatSheet](https://cheats.rs/)\
 
-  [清华rust程序设计](https://lab.cs.tsinghua.edu.cn/rust/)
+  [埼玉大学 rust](https://www.aise.ics.saitama-u.ac.jp/~gotoh/RustOnUbuntu2004.html)
 
 
 
@@ -2378,7 +2390,7 @@
 
 #### 快速入门
 
-- [安装rust](https://www.rust-lang.org/)
+- [安装rust](https://www.rust-lang.org/)、[playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021)
 
 - win
 
@@ -2392,6 +2404,7 @@
   
   # 本地文档
   rustup doc
+  
   ```
 
 - Windows Subsystem for Linux
@@ -2409,19 +2422,21 @@
   rust插件
 
   ```
-  cd D:\code\hyz-code-rust\learning_grammar
+  cd /d/code2/hello-world/rust/learning_grammar
   mkdir hello_world
   cd h*
   code .  # vscode打开
   ```
 
-  D:\code\hyz-code-rust\learning_grammar\hello_world\hello_world.rs
+  hello_world.rs
 
   ```rust
   fn main() {
       println!("hello world");
   }
   ```
+  
+  rustc (编译工具 用得少)
 
   ```
   move hello_world.rs main.rs
@@ -2442,9 +2457,11 @@
 
 - Cargo：rust的构建系统和包管理工具
 
+  构建代码、下载依赖的库、构建这些库
+  
   ```
   # 查看版本信息
-  cargo --verison
+  cargo --verison  # cargo 1.76.0 (c84b36747 2024-01-18)
   
   # 创建项目
   cargo new hello_cargo
@@ -2453,8 +2470,9 @@
   cargo build --release  # 为发布构建 编译优化
   cargo run  # 编译代码 + 执行结果
   cargo check  # 检查代码 确保通过编译  快
+  
   ```
-
+  
   
 
 
@@ -2467,7 +2485,7 @@
 
   相关的函数
 
-  外部的crate
+  外部的crate (包 库)
 
 
 
@@ -2480,28 +2498,23 @@
   ```
 
   ```rust
-  use std::io;  // prelude
+  use std::io;
   
   fn main() {
-      println!("猜数!");
-      println!("猜测一个数");
+      println!("Guessing Number Game");
+      println!("Please enter a number between 1 and 100");
   
-      // let foo = 1;
-      // let bar = foo; // immutable
-      // // foo = 2;  // err
-  
-      let mut guess = String::new();
-      io::stdin().read_line(&mut guess).expect("无法读取行");
-      // io::Result  Ok, Err
-      println!("你猜测的数字是：{}", guess)
+      let mut guess = String::new();  // immutable -> mut
+      io::stdin().read_line(&mut guess).expect("Failed to read line");  // io::Result  Ok, Err
+      println!("You guessed: {}", guess);
   }
   
   ```
-
+  
   ```
   cargo run
   ```
-
+  
 - 生成神秘数字
 
   https://crates.io/crates/rand
@@ -2514,48 +2527,47 @@
   ```
 
   ```rust
-  use std::io;  // prelude
+  use std::io;  // prelude 预导入模块
   use rand::Rng;  // trait
   
   fn main() {
-      println!("猜数!!!");
-      println!("猜测一个数!");
+      println!("Guessing Number Game");
+      println!("Please enter a number between 1 and 100");
   
       let mut guess = String::new();
-      io::stdin().read_line(&mut guess).expect("无法读取行");
-      // io::Result  Ok, Err
-      println!("你猜测的数字是：{}", guess)
-      
-      let secret_number = rand::thread_rng().gen_range(1, 101);
-      println!("神秘数字是：{}", secret_number);
+      io::stdin().read_line(&mut guess).expect("Failed to read line");  
+      println!("You guessed: {}", guess);
+  
+      let secret_number = rand::thread_rng().gen_range(1, 101);  // i32 u32 u64
+      println!("The secret number is: {}", secret_number);
   }
   
   ```
-
+  
 - 比较猜测数字与神秘数字
 
   ```rust
-  use rand::Rng;
   use std::cmp::Ordering;
-  use std::io; // prelude // trait
+  use std::io;
+  
+  use rand::Rng;
   
   fn main() {
-      println!("猜数!!!");
-      println!("猜测一个数!");
+      println!("Guessing Number Game");
+      println!("Please enter a number between 1 and 100");
   
       let mut guess = String::new();
-      io::stdin().read_line(&mut guess).expect("无法读取行");
-      // io::Result  Ok, Err
-      println!("你猜测的数字是：{}", guess);
+      io::stdin().read_line(&mut guess).expect("Failed to read line");
+      println!("You guessed: {}", guess);
   
-      let secret_number = rand::thread_rng().gen_range(1, 101); // i32 u32 u64
-      println!("神秘数字是：{}", secret_number);
+      let secret_number = rand::thread_rng().gen_range(1, 101);
+      println!("The secret number is: {}", secret_number);
   
-      let guess: u32 = guess.trim().parse().expect("Please type a number!"); // shadow
+      let guess: u32 = guess.trim().parse().expect("Please type a number!");  // shadow
       match guess.cmp(&secret_number) {
-          Ordering::Less => println!("Too samll!"), //arm
-          Ordering::Greater => println!("Too Big!"),
-          Ordering::Equal => println!("You win!"),
+          Ordering::Less => { println!("Too small!"); } // arm
+          Ordering::Equal => { println!("Congratulations! You guessed the number!"); }
+          Ordering::Greater => { println!("Too large!"); }
       }
   }
   
@@ -2564,28 +2576,28 @@
 - 允许多次猜测
 
   ```rust
-  use rand::Rng;
   use std::cmp::Ordering;
-  use std::io; // prelude // trait
+  use std::io;
+  
+  use rand::Rng;
   
   fn main() {
-      let secret_number = rand::thread_rng().gen_range(1, 101); // i32 u32 u64
-      println!("神秘数字是：{}", secret_number);
+      let secret_number = rand::thread_rng().gen_range(1, 101);
+      println!("The secret number is: {}", secret_number);
   
       loop {
-          println!("猜数!!!");
-          println!("猜测一个数!");
+          println!("Guessing Number Game");
+          println!("Please enter a number between 1 and 100");
   
           let mut guess = String::new();
-          io::stdin().read_line(&mut guess).expect("无法读取行");
-          // io::Result  Ok, Err
-          println!("你猜测的数字是：{}", guess);
+          io::stdin().read_line(&mut guess).expect("Failed to read line");
+          println!("You guessed: {}", guess);
   
-          let guess: u32 = guess.trim().parse().expect("Please type a number!"); // shadow
+          let guess: u32 = guess.trim().parse().expect("Please type a number!");
           match guess.cmp(&secret_number) {
-              Ordering::Less => println!("Too samll!"), //arm
-              Ordering::Greater => println!("Too Big!"),
-              Ordering::Equal => println!("You win!"),
+              Ordering::Less => { println!("Too small!"); }
+              Ordering::Equal => { println!("Congratulations! You guessed the number!"); }
+              Ordering::Greater => { println!("Too large!"); }
           }
       }
   }
@@ -2599,32 +2611,41 @@
   输入非数字程序奔溃 (健壮性)
 
   ```rust
-  use rand::Rng;
+  //! 该程序是一个猜数字游戏，玩家需要猜一个数字，程序会提示玩家猜大了还是猜小了，直到玩家猜中为止。
+  //!
+  //! 主要实现的功能有：
+  //! - 随机生成一个数字作为答案 (为了调试方便，该数字在最开始公布)
+  //! - 让玩家输入一个数字，并判断输入的数字是否正确
+  //! - 输出提示信息，提示玩家猜大了还是猜小了
+  //! - 循环以上流程，直到玩家猜中为止
+  
   use std::cmp::Ordering;
-  use std::io; // prelude // trait
+  use std::io;
+  
+  use rand::Rng;
   
   fn main() {
-      let secret_number = rand::thread_rng().gen_range(1, 101); // i32 u32 u64
-      println!("神秘数字是：{}", secret_number);
+      let secret_number = rand::thread_rng().gen_range(1, 101);
+      println!("The secret number is: {}", secret_number);
   
       loop {
-          println!("猜数!!!");
-          println!("猜测一个数!");
+          println!("Guessing Number Game");
+          println!("Please enter a number between 1 and 100");
   
           let mut guess = String::new();
-          io::stdin().read_line(&mut guess).expect("无法读取行");
-          // io::Result  Ok, Err
-          
+          io::stdin().read_line(&mut guess).expect("Failed to read line");
+  
           let guess: u32 = match guess.trim().parse() {
               Ok(num) => num,
               Err(_) => continue,
           };
-          println!("你猜测的数字是：{}", guess);
+          println!("You guessed: {}", guess);
+  
           match guess.cmp(&secret_number) {
-              Ordering::Less => println!("Too samll!"), //arm
-              Ordering::Greater => println!("Too Big!"),
+              Ordering::Less => { println!("Too small!"); }
+              Ordering::Greater => { println!("Too large!"); }
               Ordering::Equal => {
-                  println!("You win!");
+                  println!("Congratulations! You guessed the number!");
                   break;
               }
           }
@@ -2632,7 +2653,7 @@
   }
   
   ```
-
+  
   
 
 
@@ -2835,17 +2856,17 @@
 
   可以将多个值放在一个类型里
 
-  但每个元素的类型必须相同
-
-  长度固定
+  但每个元素的类型必须相同、长度固定
 
   类型：`[类型; 长度]`
 
-  创建
+  创建：`let a: [i32; 5] = [3; 5];`
 
-  when：将数据存放在stack而非heap、有固定数量
+  访问：索引 `a[1]`
 
-  (vetor：长度可变)
+  when：**将数据存放在stack**而非heap、有固定数量
+
+  (vetor：长度可变、推荐)
 
   ```rust
   fn main() {
@@ -2866,13 +2887,16 @@
           "December",
       ];
       println!("{}", a[1]);
-      println!("{}",months[1]);
+  
+      let index = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+      println!("{}", index[2]);  // cargo build  Compiling Finished
+      println!("{}", months[index[2]]);  // runtime panicked
   
       // vector
   }
   
   ```
-
+  
   
 
 #### 函数
@@ -2881,9 +2905,7 @@
 
   声明函数用 `fn` 关键字
 
-  函数和变量的命名规范：snake case
-
-  - 全小写、下划线隔开
+  函数和变量的命名规范：snake case (全小写、下划线隔开)
 
   ```rust
   fn main() {
@@ -2896,10 +2918,10 @@
   }
   
   ```
-
+  
 - 函数的参数
 
-  parameters、arguments
+  parameters (定义时)、arguments (调用时传入)
 
   在函数的签名里，必须声明每个参数的类型
 
@@ -2916,15 +2938,15 @@
   
   ```
   
-- 函数体中的语句和表达式
+- 函数体中的语句*statement*和表达式*expression*
 
   函数体由一系列语句组成，可选的由一个表达式结束
 
   rust是一个基于表达式的语言
 
-  语句是执行一些动作的指令
+  *statement* 是执行一些 **动作** 的指令    如：`...;` // ()
 
-  表达式会计算产生一个值
+  *expression* 会计算产生一个 **值**    如：`6 + 6`、`println!(...)`、`{...}`
 
 - 函数的定义也是语句
 
@@ -2947,9 +2969,9 @@
   
   在`->`符号后边声明函数返回值的类型，但是不可以为返回值命名
 
-  在Rust里面，返回值就是函数体里面最后一个表达式的值
+  在Rust里面，返回值就是函数体里面**最后一个表达式的值**
 
-  若想提前返回，需使用return 关键字，并指定一个值
+  若想提前返回，需使用 `return` 关键字，并指定一个值
 
   - 大多数函数都是默认使用最后一个表达式最为返回值
 
@@ -8346,6 +8368,581 @@ fn main() {
 
 
 
+## 基于rust语言的小项目
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Tsinghua 程序设计训练 (Rust)
+
+- tsinghua课程安排 (部分)
+
+  [韩文弢](https://pacman.cs.tsinghua.edu.cn/~hanwentao/)、[李国良](https://dbgroup.cs.tsinghua.edu.cn/ligl/index_cn.html)、[刘海龙](http://www.arch.tsinghua.edu.cn/info/rw_fjly/1443)
+
+  1. 程序设计基础（ FOP）：初步掌握一门编程语言（ C++），实现简单算法，体会计算思维——入门
+  2. 面向对象程序设计基础（ OOP）：学习面向对象编程的语言特性，学习体会设计思想——提高
+  3. 程序设计训练（ P&T）：学习一门新的编程语言（ Rust、 Java 或 Python），体会编程语言的设计理念，锻炼解决问题的能力——融会贯通
+  4. 软件工程（ SE）：系统设计，项目管理，团队合作
+  5. 操作系统（ OS）：结合计算机系统结构的设计与实现，抽象概念  
+
+- 教学目标  
+
+  语法、语言特性、库
+
+  现代的设计理念 (与c++比较)
+
+  自主解决问题的能力
+
+
+
+
+
+### 课程介绍与基本语法
+
+- rust：构建可靠且高效的软件  
+
+  **高效 (performance)**：没有运行时和垃圾收集器，代码的运行速度快，内存使用效率高，可用来开发对性能要求高的服务。
+
+  - 运行时：python 解释器、java JVM
+  - GC：java方便、但不可控且额外开销 (android java 有时卡)
+
+  **可靠 (reliability)**：用`类型系统`和`所有权模型`来确保内存安全性和线程安全性，在编译时消除各种潜在的问题。
+
+  - c++ 空指针... (埋患 自己追踪)
+  - rust：尽可能在编译时消灭
+
+  **好用 (productivity)**：有`丰富的文档`、`友好的编译器`（提供有用的错误信息）和`一流的工具集`，包括集成的包管理器和构建工具、支持各种编辑器的代码自动补全和类型查看功能、代码自动格式化工具等。
+
+  - 关系不大：程序运行1s > 0.1s 
+  - 关系很大：开发时间10min > 1day
+
+- 使用场景：命令行工具、网页应用、网络服务、嵌入式开发  
+
+- Rust 编写的软件
+
+  Rust 语言工具链
+
+  Servo 浏览器引擎
+
+  Redox 操作系统
+
+  Linux 内核正在加入用 Rust 语言写驱动和模块的支持
+
+  exa、 bat、 fd 等命令行工具
+
+  rCore 教学操作系统
+
+  MadFS 文件系统  
+
+
+
+
+
+- Hello World
+
+  ```rust
+  //! 知识点：
+  //! 函数定义、main 函数、输出（宏调用）、字符串、编译与运行  
+  //! 
+  //! 编译：rustc main.rs  
+  //! 运行：./main  
+  
+  fn main() {
+      println!("Hello, world!");
+  }
+  ```
+
+  宏 *Macros*：编译之前做的、tooken符号令牌
+
+
+
+
+
+- 猜数字游戏
+
+  > 通过一个简单的项目演示 Rust 的一些常见功能。项目要求：
+  >
+  > 程序随机产生一个 1–100 之间的秘密整数 n，让用户来猜。
+  >
+  > 提示用户，输入一个想猜的数 x。
+  >
+  > 如果 x = n，则猜数成功，打印祝贺信息并退出程序。
+  >
+  > 否则，根据 x 和 n 的大小关系输出提示信息，继续让用户来猜。 
+
+   
+
+- `rustc` 编译工具：简单
+
+- `cargo` 构建管理：复杂 (多文件、依赖第三方)
+
+  ```
+  cargo new guessing_game
+  
+  ```
+
+  Cargo.toml 
+
+  项目元信息：`[package]`  项目名称、版本号、作者、许可证
+
+  依赖管理：`[dependencies]`  依赖的外部库(ceate)及其版本
+
+
+
+
+
+
+
+### 所有权与结构化数据
+
+
+
+
+
+
+
+
+
+### 标准库
+
+
+
+
+
+
+
+### 泛型、特型与生命周期
+
+
+
+
+
+
+
+### 项目管理与常用库
+
+
+
+
+
+
+
+### 输入输出与网络通信
+
+
+
+
+
+### 并发编程
+
+
+
+
+
+
+
+### 高级特性与编程语言综述  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Tsinghua Wordle
+
+
+
+
+
+
+
+
+
+## Tsinghua OJ
+
+
+
+
+
+
+
+
+
+## Tsinghua os rcore
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 50 Rust Projects (akhil)
+
+#### compression with rust
+
+- 环境
+
+  ```
+  cd akhil
+  cargo new compress_rust
+  
+  ```
+
+- 依赖 Cargo.toml
+
+  ```toml
+  [dependencies]
+  flate2 = "1.0.24" # for compression
+  ```
+  
+  flate2：压缩库、提供了对DEFLATE压缩算法的高效实现
+  
+  > 主要特性
+  >
+  > 1. **高性能**：`flate2`使用了Rust语言的内存安全特性和现代CPU的优化指令，提供了非常高效的压缩和解压缩性能。
+  > 2. **灵活性**：库提供了多种压缩级别，从无压缩（级别0）到最大压缩（级别9），用户可以根据需要选择适当的压缩级别。
+  > 3. **读写流**：`flate2`支持读写流（`Read`和`Write` trait的实现），这使得它可以很容易地与Rust的标准I/O库集成，用于压缩和解压缩文件或网络数据。
+  > 4. **支持多线程**：`flate2`可以在多线程环境中使用，允许压缩和解压缩任务并行执行，进一步提高性能。
+  > 5. **内存管理**：由于Rust的所有权和借用机制，`flate2`能够有效地管理内存，避免内存泄漏和不必要的内存分配。
+  >
+  > 常见用途
+  >
+  > 1. **文件压缩**：`flate2`可以用来压缩文件，减少存储空间的占用。例如，可以将大型文件压缩成ZIP或GZIP格式。
+  > 2. **网络数据传输**：在网络上传输数据时，使用`flate2`压缩数据可以减少传输的带宽需求，提高传输效率。
+  > 3. **数据序列化**：在序列化和反序列化数据时，可以先对数据进行压缩，以减少数据的大小，特别是在处理大型数据集时非常有用。
+  
+  main.rs
+  
+  ```rust
+  //! 该程序用于压缩文件。
+  //!
+  //! 示例：cargo run data/book.pdf data/compressed_file.pdf
+  //!
+  //! use介绍：
+  //! - flate2 crate 用于压缩文件。
+  //! - copy 函数用于复制文件。
+  //! - GzEncoder 用于创建 GzEncoder 对象。
+  //! - Compression::default() 用于设置压缩级别。
+  //! - finish 函数用于完成压缩。
+  //! - metadata 函数用于获取文件大小。
+  //! - Instant 用于记录时间。
+  
+  extern crate flate2;
+  
+  use std::env::args;
+  use std::fs::File;
+  use std::io::{BufReader, copy};
+  use std::time::Instant;
+  
+  use flate2::Compression;
+  use flate2::write::GzEncoder;
+  
+  fn main() {
+      // 期待三个参数
+      if args().len() != 3 {
+          eprintln!("Usage: `source` `target`");
+          return;
+      }
+  
+      let mut input = BufReader::new(File::open(args().nth(1).unwrap()).unwrap());  // 打开源文件
+      let output = File::create(args().nth(2).unwrap()).unwrap();  // 打开目标文件
+      let mut encoder = GzEncoder::new(output, Compression::default());  // 创建 GzEncoder 对象
+      let start = Instant::now();  // 记录开始时间
+  
+      copy(&mut input, &mut encoder).unwrap();  // 复制文件
+      let output = encoder.finish().unwrap();  // 压缩文件
+  
+      println!("Source len: {:?}", input.get_ref().metadata().unwrap().len()); // 打印源文件大小
+      println!("Target len: {:?}", output.metadata().unwrap().len());  // 打印压缩后的文件大小
+      println!("Elapsed time: {:?}s", start.elapsed());  // 打印压缩和复制所需的时间 用户提示
+  }
+  
+  ```
+  
+  
+
+
+
+#### extract zip file
+
+- 环境
+
+  ```
+  cd akhil
+  cargo new decompress_rust
+  
+  ```
+
+- 需求
+
+  正确的目录结构
+
+- 依赖 Cargo.toml
+
+  [zipfile官方文档](https://docs.rs/zip/0.5.13/zip/read/struct.ZipFile.html)
+  
+  ```toml
+  [dependencies]
+  zip = "0.6.2"
+  ```
+  
+  main.rs
+  
+  ```rust
+  //! 该程序用于从zip文件中解压出所有文件
+  //!
+  //! 示例：cargo run data/example.zip
+  //!
+  //! 实现思路：
+  //! 1. 读取命令行参数，获取zip文件名
+  //! 2. 打开zip文件，读取zip文件内容
+  //! 3. 遍历zip文件内容，解压文件到指定目录
+  //! 4. 设置文件权限
+  //! 5. 输出解压结果
+  //!
+  //! 注意：
+  //! 1. 该程序依赖于zip库，需要在Cargo.toml中添加zip库依赖
+  //! 2. 该程序仅支持解压zip文件，不支持压缩文件
+  //! 3. 该程序仅支持解压文件到指定目录，不支持解压到内存
+  //! 4. 该程序目前仅支持解压到项目的根目录，不支持解压到指定目录
+  
+  use std::fs;
+  use std::io;
+  use std::path::Path;
+  
+  fn main() {
+      std::process::exit(logic_main());  // 调用 logic_main() 函数并退出程序
+  }
+  
+  
+  fn logic_main() -> i32 {
+      let args: Vec<_> = std::env::args().collect();  // 获取命令行参数
+      if args.len() < 2 {
+          println!("Usage: {} <filename>", args[0]);
+          return 1;
+      }
+  
+      // 参数正确传递
+      let zip_filename = Path::new(&args[1]);  // 获取文件名
+      let file = fs::File::open(zip_filename).unwrap();  // 打开文件
+      let mut archive = zip::ZipArchive::new(file).unwrap();  // 读取zip文件 可变存档
+  
+      // 根据存档一个个地解压文件
+      for i in 0..archive.len() {
+          let mut file = archive.by_index(i).unwrap();  // 获取文件
+          let output_path = match file.enclosed_name() {  // 获取文件名
+              Some(path) => path.to_owned(),
+              None => continue,
+          };
+  
+          // 打印文件信息
+          {
+              let comment = file.comment();  // 获取注释
+              if !comment.is_empty() {  // 注释不为空
+                  println!("File {} comment: {}", i, comment);
+              }
+          }
+  
+          // 如果文件名以/结尾 则创建目录 (否则解压文件)
+          if (*file.name()).ends_with('/') {
+              println!("File {} extracted to \"{}\"", i, output_path.display());
+              fs::create_dir_all(&output_path).unwrap();  // 创建目录
+          } else {
+              println!("File {} extracted to \"{}\" ({} bytes)", i, output_path.display(), file.size());
+  
+              // 检查父级目录
+              if let Some(p) = output_path.parent() {
+                  if !p.exists() {
+                      fs::create_dir_all(p).unwrap();  // 创建辅机目录
+                  }
+              }
+  
+              let mut outfile = fs::File::create(&output_path).unwrap();  // 创建outfile
+              io::copy(&mut file, &mut outfile).unwrap();  // 复制文件到outfile 即解压文件操作
+          }
+  
+          // 设置权限 (否则解压的文件权限将会丢失)
+          #[cfg(unix)]
+          {
+              use std::os::unix::fs::PermissionsExt;
+              if let Some(mode) = file.unix_mode() {
+                  fs::set_permissions(&output_path, fs::Permissions::from_mode(mode)).unwrap();
+              }
+          }
+      }
+      0
+  }
+  
+  ```
+  
+  
+
+
+
+#### read csv file
+
+- 环境
+
+  ```
+  cd akhil
+  cargo new csv-rust
+  
+  ```
+
+  
+
+
+
+
+
+#### read json
+
+
+
+#### write json
+
+
+
+
+
+
+
+
+
+
+
+#### get request
+
+
+
+#### async await
+
+
+
+
+
+
+
+#### making api calls
+
+
+
+
+
+
+
+#### very basic authentication
+
+
+
+
+
+#### download images
+
+
+
+
+
+
+
+#### extract links 
+
+
+
+
+
+
+
+#### connect rust and sqlite
+
+
+
+
+
+
+
+#### the best way to connect rust with MongoDB
+
+
+
+
+
+#### rust Postgres connection
+
+
+
+
+
+#### rust Postgres operations (create and read)
+
+
+
+
+
+#### actix web, rhai script + rust
+
+
+
+
+
+#### blockchain projects that use rust
+
+
+
+
+
+
+
+#### I automated my git workflow with rust
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8406,7 +9003,15 @@ fn main() {
 
 # git
 
+- ubuntu 
 
+  ```
+  which git 
+  git version
+  
+  ```
+
+  
 
 
 

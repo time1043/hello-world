@@ -20,13 +20,15 @@ fn main() {
         println!("Please enter a number between 1 and 100");
 
         let mut guess = String::new();
-        io::stdin().read_line(&mut guess).expect("Failed to read line");
+        io::stdin()
+            .read_line(&mut guess)
+            .expect("Failed to read line");  // 和外界有交流的必须显式处理错误 (防止待定工作)
 
         let guess: u32 = match guess.trim().parse() {
             Ok(num) => num,
             Err(_) => continue,
         };
-        println!("You guessed: {}", guess);
+        println!("You guessed: {guess}");
 
         match guess.cmp(&secret_number) {
             Ordering::Less => { println!("Too small!"); }

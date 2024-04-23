@@ -1,6 +1,8 @@
 # linux
 
+- 参考
 
+  
 
 
 
@@ -9,6 +11,14 @@
 
 
 # linux base
+
+- linux命令分类
+
+  文件系统、权限管理、硬件信息
+
+
+
+
 
 - 给普通用户sudo权限
 
@@ -28,7 +38,6 @@
 
   
 
-  
 
 
 
@@ -64,6 +73,29 @@
 
 
 
+- 【场景】查看服务器配置
+
+  ```bash
+  free -h  # 查看内存使用情况
+  df -h  # 查看磁盘空间使用情况
+  uname -a  # 查看操作系统信息
+  
+  ```
+
+  查看是否安装
+
+  ```bash
+  docker --version
+  docker info
+  ps aux | grep docker
+  whereis docker
+  
+  ```
+
+  
+
+
+
 
 
 # shell
@@ -76,7 +108,13 @@
 
 
 
+# enjoy
 
+- 格式化实体服务器 重装系统
+
+  引导服务器从U盘启动：Del、F2、F10 
+
+  使用 [rufus](https://rufus.ie/zh/#google_vignette) 制作 CentOS U盘启动盘
 
 
 

@@ -24,7 +24,7 @@
 
 
 
-# heima
+# heima23
 
 ## 快速入门
 
@@ -207,13 +207,13 @@
 
 - 延展概念
 
+  volumes：数据挂载
+
   Dockerfile：镜像的清单
 
   DockerCompose：容器编排
-
-  volumes：数据挂载
-
-
+  
+  
 
 
 
@@ -255,6 +255,14 @@
   
 - dockerCompose命令：
 
+  `docker compose [OPTIONS] [COMMAND]`
+  
+  `-f` (指定compose文件的路径和名称 当前目录下省略)、`-p` (指定project名称。project就是当前compose文件中设置的多个service的集合，是逻辑概念)
+  
+  `up` (创建并启动所有service容器)、`down` (停止并移除所有容器、网络)、`ps` (列出所有启动的容器)、`log` (查看指定容器的日志)、
+  
+  `stop` (停止容器)、`start` (启动容器)、`restart` (重启容器)、`top` (查看运行进程)、`exec` (在指定的运行中容器中执行命令)
+  
   
 
 
@@ -671,7 +679,7 @@
 
 
 
-### DockerCompose
+### 整体部署 DockerCompose
 
 - 两种部署方式
 
@@ -681,9 +689,7 @@
 
   ![](res/Snipaste_2024-04-23_10-51-21.png)
 
-  ![](res/Snipaste_2024-04-23_10-52-53.png)
-
-
+  
 
 - 整体部署
 
@@ -691,14 +697,19 @@
   mkdir -p /opt/workspacehyz  # mysql nginx
   cp /opt/code/hmall/hm-service/target/hm-service.jar /opt/workspacehyz/hm-service.jar
   cp /opt/code/hmall/hm-service/Dockerfile /opt/workspacehyz/Dockerfile
+  
+  cd /opt/workspacehyz
   ls  # docker-compose.yml  Dockerfile  hm-service.jar  mysql  nginx
   
-  
+  # http://192.168.64.138:18080/
+  docker compose up -d
+  docker compose ps
+  docker compose down  # clear
   
   ```
-
-  DockerCompose.yml
-
+  
+  docker-compose.yml (相对路径 123456)
+  
   ```yml
   version: "3.8"
   
@@ -710,7 +721,7 @@
         - "3306:3306"
       environment:
         TZ: Asia/Shanghai
-        MYSQL_ROOT_PASSWORD: 123
+        MYSQL_ROOT_PASSWORD: 123456
       volumes:
         - "./mysql/conf:/etc/mysql/conf.d"
         - "./mysql/data:/var/lib/mysql"
@@ -745,14 +756,250 @@
     hm-net:
       name: hmall
   ```
+  
+  
+
+
+
+- DockerCompose 
+
+  项目一键部署
+
+  集群一键部署
 
   
 
 
 
-
-
 # geekhour
+
+
+## docker
+
+- 简介
+
+  定位：轻量级虚拟机、部署环境
+
+  理念：将应用程序的代码、工具库和运行环境都封装到了一个容器 (降低测试和部署的难度)
+
+  操作：docker命令
+
+- BigPicture
+
+  基本概念、安装配置、常用命令
+
+  构建镜像、运行容器、DockerCompose & Kubernetes
+
+  应用隔离、环境配置、安装部署
+
+  持续集成、持续发布、DevOps
+
+
+
+- 概念
+
+  docker：是一个用于构建`build`、运行`run`、传送`share`应用程序的平台
+
+  ![](res/Snipaste_2024-03-05_08-22-43.png)
+
+  ![](res/Snipaste_2024-03-05_08-23-38.png)
+
+- 虚拟机与docker：虚拟化、资源整合
+
+  虚拟化技术：将物理资源虚拟为多个逻辑资源 (环境隔离 独立运行)
+
+  **虚拟机**占用了大量资源：需要的是一个web服务、但虚拟机启动完整OS (资源浪费 启动慢)
+
+  **容器**：使用宿主机的操作系统 (资源占用少 启动快 上百容器)
+
+  (docker是容器化解决方案之一)
+
+  ![](res/Snipaste_2024-03-05_08-34-16.png)
+
+- 基本原理
+
+  `images`：只读模板，用来创建容器 (类 食谱)
+
+  `containers`：docker的运行实例，提供了独立的可移植环境 (实例对象 菜肴)
+
+  `registry`：存储docker镜像，最流行的仓库是dockerhub
+
+  ![](res/Snipaste_2024-03-05_09-15-20.png)
+
+  
+
+
+
+### 安装docker
+
+- win docker
+
+  开启hyper-v、下载
+
+  ```
+  docker version  # 客户端 服务端
+  docker info
+  ```
+  
+  
+  
+- 国内镜像配置 (aliyun! )
+
+  ```json
+  {
+    "builder": {
+      "gc": {
+        "defaultKeepStorage": "20GB",
+        "enabled": true
+      }
+    },
+    "experimental": false,
+    "registry-mirrors": [
+      "https://registry.docker-cn.com",
+      "https://docker.mirrors.ustc.edu.cn",
+      "https://hub-mirror.c.163.com",
+      "https://mirror.ccs.tencentyun.com",
+      "https://xxxxxxxx.mirror.aliyuncs.com"
+    ]
+  }
+  ```
+
+  
+
+
+
+### 容器化和Dockerfile
+
+- 容器化：将应用程序打包成容器，然后在容器中运行应用程序的过程
+
+  实现：
+
+  1. 创建一个`Dockerfile` (告诉docker构建应用程序镜像所需的步骤和配置)
+
+  2. 使用dockerfile构建镜像
+  3. 使用该镜像创建和运行容器
+
+  
+
+- 【案例】
+
+  C:\Users\16654\Desktop\HelloDocker\index.js
+
+  ```javascript
+  console.log("hello docker")
+  ```
+
+  ```
+  node .\index.js  # node 运行时环境 在浏览器以外的地方运行js
+  ```
+
+  OS、nodejs；应用程序复制；运行
+
+  C:\Users\16654\Desktop\HelloDocker\Dockerfile
+
+  ```
+  FROM 基础镜像  # 环境
+  COPY 源路径即相对于dockerfile 目标路径即相对于镜像的路径  # 项目
+  
+  # CMD [ "可执行程序的名字","传入参数",... ]
+  CMD 可执行程序的名字 传入参数...
+  ```
+  
+  ```dockerfile
+  FROM node:14-alpine
+  COPY index.js /index.js
+  
+  # CMD [ "node","/index.js" ]
+  CMD node /index.js
+  ```
+  
+  ```
+  # 构建镜像
+  docker bulid -t hello-docker:0.0.1 .  # hello-docker是镜像的名字 版本号  .表示当前目录
+  docker images  # docker iamge ls  查看所有镜像
+
+  # 运行
+  docker run hello-docker:0.0.1
+  ```
+  
+  
+
+- 把镜像上传至 [dockerhub](https://hub.docker.com/)
+
+  [在线docker环境](https://labs.play-with-docker.com/)
+
+  ```bash
+  # 上传镜像
+  docker tag hello-docker:0.0.1 plktime1043/hello-docker:0.0.1  # 指定用户 快捷方式
+  docker push plktime1043/hello-docker:0.0.1
+  
+  # 需要登录
+  docker login
+  
+  # 拉取镜像
+  docker pull plktime1043/hello-docker:0.0.1
+  
+  ```
+
+  
+
+- volumes
+
+  docker容器中的数据是不会持久化的
+
+  volumes：docker中用于存储数据的，即把容器中的指定路径映射到宿主机上 (数据在宿主机的磁盘上持久化)
+
+
+
+- DevEnv Beta
+
+  每个人都在一个相同的环境下开发
+
+
+
+- DockerCompose
+
+  用来定义和运行多个docker容器应用程序的工具 (vue、springboot、mysql、redis、nginx 既独立又关联)
+
+  使用`docker-compose.yaml`文件来配置应用程序的服务 (将互相关联的容器组合 形成项目)
+
+  一条命令即可创建并启动所有服务
+
+  ```bash
+  docker compose up
+  
+  ```
+  
+  
+
+### 数据卷挂载
+
+
+
+
+
+
+
+## Kubernetes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# atguigu22
+
+
+
+
 
 
 
@@ -763,6 +1010,140 @@
 
 
 # 应用方向
+
+## 编程语言环境
+
+### python
+
+- python
+
+  ```
+  docker search python  # 检索
+  docker pull python:3.8-alpine3.18  # 拉取镜像
+  ```
+
+  
+
+
+
+### java
+
+
+
+
+
+## 数据库安装
+
+### postgreSQL
+
+- 参考
+
+  [dockerHub:postgreSQL](https://hub.docker.com/_/postgres)、[windocker安装postgres教程](https://www.cnblogs.com/an-shiguang/p/17840671.html)
+
+- 命令
+
+  ```bash
+  docker search postgres  # 检索
+  docker pull postgres:16-alpine3.19  # 拉取镜像
+  docker images  # 查看本地镜像
+  
+  # run 创建并运行一个容器
+  docker run -d \
+    --name mypostgres \
+    -e POSTGRES_DB=database \
+    -e TZ=PRC \
+    -e POSTGRES_USER=root \
+    -e POSTGRES_PASSWORD=123456 \
+    -p 5432:5432 \
+    -v D:\\systemEnvironment\\pastgresData:/var/lib/postgresql/data \
+    postgres:16-alpine3.19
+  # -name 容器名称mypostgres
+  # -e TZ=PRC 中国时区
+  # -e POSTGRES_USER=root 用户名是root（不设置默认用户名postgres）
+  # -e POSTGRES_DB=database DB模式数据库模式
+  # -e POSTGRES_PASSWORD 密码
+  # -p 5432:5432端口映射，把容器的5432端口映射到服务器的5432端口
+  # -v 将数据存到宿主服务器
+  # -d 后台运行
+  
+  # 进入容器
+  docker exec -it mypostgres bash
+  psql -U root -d database
+  
+  create database hyzdb;  # 创建数据库
+  \c hyzdb;  # 切换数据库
+  
+  docker volume create mydata  # 创建数据卷
+  docker volume ls  # 查看所有数据卷
+  docker volume inspect mydata  # 查看数据卷信息
+  
+  ```
+  
+  踩坑
+  
+  ```
+  # 一个坑：win明明端口没被占用却显示占用  ps管理员权限
+  net stop winnat
+  net start winnat
+  ```
+
+
+
+
+
+### Redis
+
+- win docker安装redis
+
+  ```bash
+  docker run --restart=always -p 6379:6379 \
+  			--name myredis -d redis:7.0.12 \
+  			--requirepass 123456
+  
+  cd /d/systemEnvironment/docker-containers/redis/
+  
+  docker run -d --privileged=true /
+  			--restart=always -p 6379:6379 \
+  			-v D:\\systemEnvironment\\docker-containers\\redis\\redis.conf:/etc/redis/redis.conf \
+  			-v D:\\systemEnvironment\\docker-containers\\redis\\data:/data \
+  			--name myredis redis:4.0 redis-server /etc/redis/redis.conf --appendonly yes
+  # –privileged=true：容器内的root拥有真正root权限，否则容器内root只是外部普通用户权限
+  # -v /docker/redis/conf/redis.conf:/etc/redis/redis.conf：映射配置文件
+  # -v /docker/redis/data:/data：映射数据目录
+  # redis-server /etc/redis/redis.conf：指定配置文件启动redis-server进程
+  # –appendonly yes：开启数据持久化
+  
+  ```
+
+  
+
+
+
+### mongoDB
+
+- 命令
+
+  ```bash
+  docker run -d \
+    --name mymongo \
+    -p 27017:27017 \
+    -v D:\\systemEnvironment\\mongo\\configdb:/data/configdb \
+    -v D:\\systemEnvironment\\mongo\\db:/data/db \
+    --auth
+    
+  ```
+  
+  
+
+
+
+
+
+
+
+
+
+
 
 ## 网站业务开发
 
@@ -925,6 +1306,18 @@
 - [docker搭建hadoop集群](https://juejin.cn/post/7102339789030064136)
 
 
+
+
+
+
+
+### spark
+
+
+
+
+
+### flink
 
 
 

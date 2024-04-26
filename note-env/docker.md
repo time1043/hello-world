@@ -16,10 +16,16 @@
 
 - 官网
 
-  [docker 官网](https://www.docker.com/)、[docker hub 镜像仓库](https://hub.docker.com/)、[在线docker环境](https://labs.play-with-docker.com/)、
+  [docker 官网](https://www.docker.com/)、[docker hub 镜像仓库](https://hub.docker.com/)、
 
-  [docker官方文档](https://docs.docker.com/engine/install/centos/)、[docker命令文档查询](https://docs.docker.com/engine/reference/commandline/run/)、[docker 中文文档](http://www.dockerinfo.net/docker%E5%AE%89%E8%A3%85-windows)
+  [docker docs](https://docs.docker.com/engine/install/centos/)、[docker命令文档查询](https://docs.docker.com/engine/reference/commandline/run/)、[docker 中文文档](http://www.dockerinfo.net/docker%E5%AE%89%E8%A3%85-windows)、
 
+  [kubernetes 官网](https://kubernetes.io/)、[kubernetes docs](https://kubernetes.io/docs/home/)、[minikube docs](https://minikube.sigs.k8s.io/docs/start/)、[k3s](https://k3s.io/)
+  
+  [在线环境 docker](https://labs.play-with-docker.com/)、在线环境 Killercoda、在线环境 Play-With-K8s、
+  
+  [geekhour note](https://geekhour.net/)、[同学笔记](https://www.yuque.com/xiaoguai-pbjfj/cxxcrs/ocefqltbmbgl5eqg?singleDoc#)
+  
   
 
 
@@ -981,6 +987,383 @@
 
 
 ## Kubernetes
+
+- BigPicture
+
+  基本概念、架构原理、核心组件
+
+  资源对象、环境配置、实践操作
+
+
+
+
+
+- 定位
+
+  开源的容器编排引擎 (管理容器化的应用和服务)
+
+  容器的⾃动化的部署、扩容、缩容、升级、回滚  
+
+- 比较
+
+  `Docker`：单机的容器管理工具
+
+  `Docker Swarm`：容器编排引擎 (小型简单场景)
+
+  `Kubernetes`：程序运行在多个节点 (复杂场景 Google开源)
+
+  `Mesos`：程序运行在多个节点 (复杂场景 Apache)
+
+- 背景
+
+  Microservice architecture, containerization technology (高效部署 稳定性可用性 降低成本)
+
+  容器数量少：shell脚本
+
+  容器数量多：容器编排
+
+
+
+- Kubernetes
+
+  容器编排：配置文件定义应用程序的部署方式
+
+  高可用性：系统可以长时间持续运行，不因为组件的故障导致系统不可用 (自动重启 自动重建 自我修复)
+
+  可扩展性：系统根据负载变化，动态扩容缩容 (灾难恢复 弹性伸缩)
+
+  生态系统、社区支持
+
+- 场景
+
+  部署购物系统：架构复杂、规模庞大 
+
+  1. 需要根据访问量自动分配服务器、网络资源
+  2. 在某个容器宕机后自动进行灾情恢复、故障转移
+
+  
+
+- 定位：大规模部署分布式应用的平台
+
+  ![](res/Snipaste_2024-03-05_07-39-40.png)
+
+  
+
+
+
+### 核心组件
+
+- kubernetes
+
+  最为核心的资源对象 
+
+  解决问题、协同工作 (架构升级演进)
+
+
+
+
+
+- kubernetes组件
+
+  ![Snipaste_2024-04-26_20-36-33](res/Snipaste_2024-04-26_20-36-33.png)
+
+- 基本架构
+
+  `Node` ：物理机或虚拟机，容器可以共享资源 (网络 存储 运行时配置)
+
+  `Pod`：节点上运行Pod，Pod是**容器**的抽象，最小执行单元 (容易被创建或销毁 故障时自动销毁)
+
+  `Service`：将一组pod封装成一个服务，并提供统一入口访问 
+
+  - 内部服务：没必要暴露 (数据库 缓存 消息队列)
+  - 外部服务：对外暴露 (微服务后端API接口 给用户使用的前端界面)
+
+  `NodePort`：在Node开放一个端口，将端口映射到Service (开放测试环境 IP+Port)
+
+  `Ingress`：管理从集群外部到内部服务的规则，将外部请求路由转发到集群内部的service上 (生产环境 域名) 
+
+  - 还能配置 负载均衡、SSL证书
+
+- 配置信息 (解耦)
+
+  `ConfigMap`：将配置信息封装给应用程序读取，避免配置变更的重新编译和部署
+
+  `Secret`：将敏感信息封装 (Base64编码)
+
+- 数据持久化
+
+  `Volume`：将数据挂载到集群中的本地磁盘或远程存储器
+
+- 高可用性 (节点故障 更新维护)
+
+  `Deployment`：部署**无状态**应用程序，将多个pod组装且有副本控制 滚动更新 自动扩缩容 
+
+  `StatefulSet`：部署**有状态**应用程序，将多个pod组装且有副本控制 滚动更新 自动扩缩容 (稳定网络标识符 持久化存储)
+
+  
+
+
+
+
+### 架构原理
+
+- Master-Worker架构
+
+  Master: manage the entire cluster
+
+  Worker: run applications and services  [Kubernetes / Cluster Architecture / Nodes](https://kubernetes.io/docs/concepts/architecture/nodes/)
+
+  ![Snipaste_2024-04-26_21-01-59](res/Snipaste_2024-04-26_21-01-59.png)
+
+
+
+
+
+- Worker-Node 
+
+  `kubelet`: 管理节点上的pod，定期监控运行情况汇报给api-server，定期从api-server接收新的pod规范
+
+  `kube-proxy`: 为pod提供网络代理和负载均衡
+
+  `container runtime`: work (pull images, create container, stop start; application run in a container)
+
+- 容器运行时
+
+  docker-engine (docker)
+
+  containerd, CRI-O, Mirantis Conta
+
+
+
+- Master-Node
+
+  调度不同pod到不同节点、监控节点的状态、添加删除节点
+
+  `kube-apiserver`: 集群网关，提供kubernetes集群的API接口服务，所有组件都通过此接口通信 (客户端交互 kubectl Dashboard)
+
+  `Scheduler`: 监控集群中所有节点的资源使用情况，根据策略将pod调度到合适节点上
+
+  `Controller Manager`: 管理集群中各种资源对象的状态 (监控故障 迅速反应 pod node service)
+
+  `etcd`: 高可用的键值存储系统，存储集群中所有资源对象的状态信息 (集群的数据存储中心 应用程序数据库不存储在此)
+
+  
+
+- 云服务商提供的
+
+  `Cloud Controller Manager`: 负责与云平台API进行交互，提供一致的管理接口
+
+
+
+
+
+### 搭建环境 minikube
+
+- 简介 (本地开发环境 本地单节点kubernetes集群)
+
+  服务端
+
+  `minikube` 轻量级的kubernetes发行版 
+
+  `k3s`、`k3d`、`kind` 其他方案的搭建本地keburnetes集群
+
+  客户端
+
+  `kubectl` (命令行) -> Master-Node: Kube-APIServer
+
+  `Dashboard` (webUI)
+
+  `...` (程序封装API接口)
+
+  
+
+- [安装minikube (自动安装kubectl)](https://minikube.sigs.k8s.io/docs/start/)
+
+  需要开启系统的虚拟化功能
+
+  DockerDesktop 自带 minikube
+
+  ```bash
+  # macOS
+  brew install minikube
+  minikube verison
+  
+  # Windows
+  choco install minikube
+  
+  # Linux
+  curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+  sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+  
+  ```
+
+- 常用命令
+
+  ```bash
+  # minikube
+  minikube start --image-mirror-country=cn  # 启动本地kubernetes集群
+  minikube status  # 获取状态
+  minikube stop
+  minikube delete
+  
+  minikube pause  # 暂停kubernetes
+  minikube unpause
+  
+  minikube dashboard  # 访问在minikube集群中运行的dashboard
+  
+  # 使用kubectl
+  kubectl get nodes
+  
+  ```
+  
+  
+
+
+
+### 搭建环境 k3s
+
+- 比较
+
+  `minikube`只能⽤来在本地搭建⼀个**单节点**的kubernetes集群环境
+
+  `Multipass`和`k3s`来搭建⼀个**多节点**的kubernetes集群环境
+
+  
+
+
+
+- Multipass 简介
+
+  [Multipass](https://Multipass.run/) 是轻量级的虚拟机管理工具，在本地快速创建和管理虚拟机
+
+  相⽐于VirtualBox或者VMware，Multipass更加轻量快速 (命令行工具)
+
+- 安装
+
+  ```bash
+  # macOS
+  brew install multipass
+  multipass version
+  
+  # Windows
+  choco install multipass
+  
+  # Linux
+  sudo snap install multipass
+  
+  ```
+
+- 常用命令
+
+  ```bash
+  # 查看帮助
+  multipass help
+  multipass help <command>
+  
+  # 创建⼀个名字叫做k3s的虚拟机
+  multipass launch --name k3s --cups 2 --memory 8G --disk 10G 
+  
+  multipass exec k3s -- ls -l  # 在虚拟机中执⾏命令
+  multipass shell k3s  # 进⼊虚拟机并执⾏shell
+  multipass info k3s  # 查看虚拟机的信息
+  
+  multipass stop k3s  # 停⽌虚拟机
+  multipass start k3s  # 启动虚拟机
+  multipass delete k3s  # 删除虚拟机
+  
+  multipass purge  # 清理虚拟机
+  multipass list  # 查看虚拟机列表
+  
+  # 挂载⽬录（将本地的~/kubernetes/master⽬录挂载到虚拟机中的~/master⽬录）
+  multipass mount ~/kubernetes/master master:~/master
+  
+  ```
+
+  默认不允许ssh远程登录，配置ssh和免密登录 (非必须)
+
+  ```bash
+  multipass shell k3s
+  sudo apt install net-tools
+  vi /etc/ssh/sshd_config
+  passwd
+  ssh-keygen
+  ssh-copy-id ubuntu@192.168.105.10
+  alias master='ssh ubuntu@192.168.105.10'
+  
+  ```
+
+  
+
+- k3s 简介
+
+  [k3s](https://k3s.io/)
+
+- 使用
+
+  ```bash
+  curl -sfL https://get.k3s.io | sh - 
+  # Check for Ready node, takes ~30 seconds 
+  sudo k3s kubectl get node 
+  
+  
+  # 创建一个master节点的虚拟机
+  multipass launch --name k3s --cpus 2 --memory 8G --disk 10G
+  # 创建两个worker节点的虚拟机
+  multipass launch --name worker1 --cpus 2 --memory 8G --disk 10G
+  multipass launch --name worker2 --cpus 2 --memory 8G --disk 10G
+  
+  # 在worker节点虚拟机上安装k3s
+  for f in 1 2; do
+  multipass exec worker$f -- bash -c "curl -sfL https://rancher
+  mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn
+  K3S_URL=\"https://$MASTER_IP:6443\" K3S_TOKEN=\"$TOKEN\" sh -"
+  done
+  
+  ```
+
+  
+
+
+
+### 在线环境
+
+
+
+
+
+
+
+### kubectl常用命令
+
+
+
+
+
+
+
+
+
+### 配置文件
+
+
+
+
+
+
+
+
+
+### 配置和公开服务
+
+
+
+
+
+
+
+### Portainer
+
+
 
 
 

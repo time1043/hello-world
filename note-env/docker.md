@@ -1,20 +1,10 @@
 # docker
 
-- 定位
-
-  轻量级的虚拟机
-
-  快速构建build、运行run、传送share应用的工具
-
-  
-
-
-
-- 参考
+- Reference - blog
 
   [黑马博客文章](https://b11et3un53m.feishu.cn/wiki/MWQIw4Zvhil0I5ktPHwcoqZdnec)
 
-- 官网
+- Reference - org
 
   [docker 官网](https://www.docker.com/)、[docker hub 镜像仓库](https://hub.docker.com/)、
 
@@ -30,7 +20,17 @@
 
 
 
-# heima23
+- 定位
+
+  轻量级的虚拟机
+
+  快速构建build、运行run、传送share应用的工具
+
+  
+
+
+
+# docker (heima23)
 
 ## 快速入门
 
@@ -777,7 +777,7 @@
 
 
 
-# geekhour
+# docker (geekhour)
 
 
 ## docker
@@ -849,8 +849,12 @@
   
   
   
-- 国内镜像配置 (aliyun! )
+- 国内镜像配置 (aliyun!!)
 
+  win: "C:\Users\huangyingzhu\.docker\daemon.json"
+  
+  win: docker-desktop -> setting -> docker engine
+  
   ```json
   {
     "builder": {
@@ -869,7 +873,7 @@
     ]
   }
   ```
-
+  
   
 
 
@@ -1378,7 +1382,7 @@
 
 
 
-# atguigu22
+# docker (atguigu22)
 
 
 
@@ -1485,11 +1489,11 @@
   
   cd /d/systemEnvironment/docker-containers/redis/
   
-  docker run -d --privileged=true /
+  docker run -d --privileged=true \
   			--restart=always -p 6379:6379 \
   			-v D:\\systemEnvironment\\docker-containers\\redis\\redis.conf:/etc/redis/redis.conf \
   			-v D:\\systemEnvironment\\docker-containers\\redis\\data:/data \
-  			--name myredis redis:4.0 redis-server /etc/redis/redis.conf --appendonly yes
+  			--name myredis redis:5.0.14 redis-server /etc/redis/redis.conf --appendonly yes
   # –privileged=true：容器内的root拥有真正root权限，否则容器内root只是外部普通用户权限
   # -v /docker/redis/conf/redis.conf:/etc/redis/redis.conf：映射配置文件
   # -v /docker/redis/data:/data：映射数据目录
@@ -1708,7 +1712,11 @@
 
 ### docker里装win
 
-- [把 Windows 装进 Docker 容器里](https://soulteary.com/2024/03/11/install-windows-into-a-docker-container.html)
+- 参考
+
+  [把 Windows 装进 Docker 容器里](https://soulteary.com/2024/03/11/install-windows-into-a-docker-container.html)
+  
+- 命令
 
   ```bash
   docker pull dockurr/windows
@@ -1725,7 +1733,33 @@
 
   
 
+### docker里装centos
 
+- 参考
+
+  [利用noVNC使用浏览器打开Docker下的CentOS7桌面](https://zhuanlan.zhihu.com/p/378723906)
+
+- 命令
+
+  ```bash
+  docker pull centos:7.9.2009
+  docker run -itd --privileged \
+    --name centos7.9_vnc \
+    -p 15901:5901 -p 16901:6901 \
+    centos:7.9.2009 /usr/sbin/init
+  
+  docker exec -it centos7.9_vnc bash
+  echo -e "root\nroot" | passwd
+  
+  # desktop VNC noVNC
+  curl -L https://gitee.com/panchongwen/my_scripts/raw/main/linux/centos7_vnc_install.sh -o centos7_vnc_install.sh
+  bash ./centos7_vnc_install.sh
+  
+  # localhost:6901
+  
+  ```
+
+  
 
 
 

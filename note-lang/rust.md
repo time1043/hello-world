@@ -12,7 +12,7 @@
 
 
 
-# rust (个性)
+# rust (yangxu)
 
 ## 速通基础
 

@@ -1,22 +1,22 @@
-# docker
-
-- Reference - blog
-
-  [黑马博客文章](https://b11et3un53m.feishu.cn/wiki/MWQIw4Zvhil0I5ktPHwcoqZdnec)
+# docker-kubernetes
 
 - Reference - org
 
-  [docker 官网](https://www.docker.com/)、[docker hub 镜像仓库](https://hub.docker.com/)、
+  [docker org](https://www.docker.com/), [docker hub](https://hub.docker.com/)、
 
-  [docker docs](https://docs.docker.com/engine/install/centos/)、[docker命令文档查询](https://docs.docker.com/engine/reference/commandline/run/)、[docker 中文文档](http://www.dockerinfo.net/docker%E5%AE%89%E8%A3%85-windows)、
+  [docker docs](https://docs.docker.com/engine/install/centos/), [docker command document query](https://docs.docker.com/engine/reference/commandline/run/), [docker docs CN](http://www.dockerinfo.net/docker%E5%AE%89%E8%A3%85-windows), 
 
-  [kubernetes 官网](https://kubernetes.io/)、[kubernetes docs](https://kubernetes.io/docs/home/)、[minikube docs](https://minikube.sigs.k8s.io/docs/start/)、[k3s](https://k3s.io/)
-  
-  [在线环境 docker](https://labs.play-with-docker.com/)、在线环境 Killercoda、在线环境 Play-With-K8s、
-  
-  [geekhour note](https://geekhour.net/)、[同学笔记](https://www.yuque.com/xiaoguai-pbjfj/cxxcrs/ocefqltbmbgl5eqg?singleDoc#)
-  
-  
+  [kubernetes 官网](https://kubernetes.io/), [kubernetes docs](https://kubernetes.io/docs/home/), [minikube docs](https://minikube.sigs.k8s.io/docs/start/), [k3s](https://k3s.io/)
+
+  [在线环境 docker](https://labs.play-with-docker.com/), 在线环境 Killercoda、在线环境 Play-With-K8s、
+
+  Reference - course 
+
+  [docker koudinglang](https://www.bilibili.com/video/BV1PT411d7ci/), [kubernetes koudinglang](https://www.bilibili.com/video/BV1MT411x7GH), 
+
+- Reference - blog
+
+  [geekhour note](https://geekhour.net/), [kubernetes note](https://www.yuque.com/xiaoguai-pbjfj/cxxcrs/ocefqltbmbgl5eqg?singleDoc#), [heima note](https://b11et3un53m.feishu.cn/wiki/MWQIw4Zvhil0I5ktPHwcoqZdnec), [kubernetes note](https://znunwm.top/archives/k8s-xiang-xi-jiao-cheng), [dockerfile note](https://yeasy.gitbook.io/docker_practice/image/dockerfile/env), 
 
 
 
@@ -1366,6 +1366,182 @@
 
 
 ### Portainer
+
+
+
+
+
+
+
+
+
+# docker (koudinglang)
+
+## Background
+
+### No Docker
+
+- History
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Prepare the Environment
+
+
+
+
+
+
+
+## Basic concepts 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Basic concepts 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Project exercises
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# kubernetes (koudinglang)
+
+## Background
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Basic concepts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Project exercises
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

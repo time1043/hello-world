@@ -612,16 +612,40 @@
 
 
 
-### nodejs (nvm)
+### golang
 
-#### nvm 
+#### go
 
-- nvm (nodejs 版本管理)
+
+
+
+
+### nodejs (nvm fnm)
+
+#### nodejs version management
+
+- solution
+
+  [nvm (Node Version Manager)](https://github.com/nvm-sh/nvm): shell
+
+  [fnm (Fast Node Manager)](https://github.com/Schniz/fnm): Rust
+
+
+
+- nvm 
 
   ```bash
-  nvm list // 显示已安装的版本（同 nvm list installed）
-  nvm list installed // 显示已安装的版本
-  nvm list available // 显示所有可以下载的版本
+  # Have been installed
+  nvm list 
+  nvm list installed 
+  # downloadable
+  nvm list available 
+  
+  ```
+  
+- fnm
+
+  ```bash
   
   ```
 

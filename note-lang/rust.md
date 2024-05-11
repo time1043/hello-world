@@ -1,24 +1,38 @@
 # rust
 
-- 语言的比较
+- Reference - org
 
-  java：爆内存
+  [rust org](https://www.rust-lang.org/), [crates](https://crates.io/)
 
-  go：
+- Reference - docs
 
-  rust：
+  [The Rust Programming Language](https://www.rustwiki.org.cn/zh-CN/book/foreword.html), [CS198 Rust](http://cis198-2016s.github.io/), [Rust Language Cheat Sheet](https://cheats.rs/)
+
+  [Rust on Ubuntu 20.04 in WSL2](https://www.aise.ics.saitama-u.ac.jp/~gotoh/RustOnUbuntu2004.html)
+
+- Reference - Course
+
+  [tsinghua programming (rust)](https://lab.cs.tsinghua.edu.cn/rust/), [tsinghua operating system (rust)](https://rcore-os.cn/rCore-Tutorial-Book-v3), [tsinghua software engineering](https://lab.cs.tsinghua.edu.cn/software-engineering/basic/web/), [tsinghua 实验物理的大数据方法 (python)](https://hep.tsinghua.edu.cn/~orv/teaching/physics-data/)
+
+  [chentian Rust training](https://www.bilibili.com/video/BV19b4y1o7Lt/), [Rust Project: xdiff](https://www.bilibili.com/video/BV1dG4y167M9/), [xdiff github](https://github.com/Tubitv/xdiff), [Rust Project: reservation](https://www.bilibili.com/video/BV1aV4y1L72b/); 
+
+  [Learn Rust Programming - Complete Course (freeCodeCamp.org)](https://www.youtube.com/watch?v=BpPEoZW5IiY); 
+
+  [50 Rust Projects](https://www.youtube.com/watch?v=qru3L4BvrOU&list=PL5dTjWUk_cPYuhHm9_QImW7_u4lr5d6zO), [50 source code](https://github.com/AkhilSharma90/Rust-Compress); 
+
+  [基于rust语言的小项目](https://www.bilibili.com/video/BV1v64y1R7mq/)
 
 
 
 
 
-# rust (yangxu)
+# Rust (yangxu)
 
-## 速通基础
 
-### 前言
 
-#### 背景
+## Basic Conception
+
+### Background
 
 - rust：新的编程语言
 
@@ -41,30 +55,8 @@
   高性能webService、webAssembly、命令行工具
 
   网络编程、嵌入式设备、系统编程
-
-
-
-- 参考课程
-
-  [tsinghua 程序设计 (rust)](https://lab.cs.tsinghua.edu.cn/rust/)、[tsinghua 操作系统 (rust)](https://rcore-os.cn/rCore-Tutorial-Book-v3)、[tsinghua 软件工程](https://lab.cs.tsinghua.edu.cn/software-engineering/basic/web/)、[tsinghua 实验物理的大数据方法 (python)](https://hep.tsinghua.edu.cn/~orv/teaching/physics-data/)
-
-  [程序君的 Rust 培训](https://www.bilibili.com/video/BV19b4y1o7Lt/)；[Rust 项目实操 - xdiff](https://www.bilibili.com/video/BV1dG4y167M9/)；[xdiff源码](https://github.com/Tubitv/xdiff)、[Rust 项目实操 - 预订系统](https://www.bilibili.com/video/BV1aV4y1L72b/)；
   
-  [Learn Rust Programming - Complete Course (freeCodeCamp.org)](https://www.youtube.com/watch?v=BpPEoZW5IiY)、
   
-  [50 Rust Projects - New Playlist Announcement](https://www.youtube.com/watch?v=qru3L4BvrOU&list=PL5dTjWUk_cPYuhHm9_QImW7_u4lr5d6zO)、[50 源码](https://github.com/AkhilSharma90/Rust-Compress)；
-  
-  [基于rust语言的小项目](https://www.bilibili.com/video/BV1v64y1R7mq/)
-  
-- 参考资料
-
-  [rust程序设计语言](https://www.rustwiki.org.cn/zh-CN/book/foreword.html)、[CS198Rust](http://cis198-2016s.github.io/)、[RustLanguageCheatSheet](https://cheats.rs/)\
-
-  [埼玉大学 rust](https://www.aise.ics.saitama-u.ac.jp/~gotoh/RustOnUbuntu2004.html)
-  
-- 官网
-
-  [rust 官网](https://www.rust-lang.org/)、[crates](https://crates.io/)
 
 
 
@@ -82,28 +74,25 @@
 
 
 
-#### 快速入门
+## Prepare the Environment
 
-- [安装rust](https://www.rust-lang.org/)、[playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021)
+- [rust install](https://www.rust-lang.org/)、[rust playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021)
 
 - win
 
-  ```
-  # 更新与卸载rust
+  ```bash
   rustup update
   rustup self uninstall
   
-  # 安装验证
   rustc --verison
   
-  # 本地文档
   rustup doc
   
   ```
-
+  
 - Windows Subsystem for Linux
 
-  ```
+  ```bash
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
   ```
 
@@ -2200,7 +2189,7 @@ fn main() {
 
 
 
-## 进阶语法
+# Rust Async (yangxu)
 
 ### 异步并发
 
@@ -2208,7 +2197,7 @@ fn main() {
 
 
 
-## RustWeb全栈开发 (Actix)
+# Rust Actix (yangxu)
 
 ### 背景
 

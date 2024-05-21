@@ -1,5 +1,9 @@
 # System Design
 
+- Reference - course
+
+  [System Design for Beginners Course (freeCodeCamp.org)](https://www.youtube.com/watch?v=m8Icp_Cid5o), 
+
 - 参考课程：
 
   [Alex Xu的系统设计面试课程](https://schelley.co/alex)、[SystemExpert](https://algoexpert.io/schelley) 、[System Design Interview模拟面试](https://schelley.co/coach) 

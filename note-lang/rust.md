@@ -12,15 +12,21 @@
 
 - Reference - Course
 
+  [Learn Rust Programming - Complete Course 🦀 (freeCodeCamp.org)](https://www.youtube.com/watch?v=BpPEoZW5IiY&t=101s), 
+
+  [Rust Programming Course for Beginners - Tutorial (freeCodeCamp.org)](https://www.youtube.com/watch?v=MsocPEZBd-M), 
+
   [tsinghua programming (rust)](https://lab.cs.tsinghua.edu.cn/rust/), [tsinghua operating system (rust)](https://rcore-os.cn/rCore-Tutorial-Book-v3), [tsinghua software engineering](https://lab.cs.tsinghua.edu.cn/software-engineering/basic/web/), [tsinghua 实验物理的大数据方法 (python)](https://hep.tsinghua.edu.cn/~orv/teaching/physics-data/)
 
   [chentian Rust training](https://www.bilibili.com/video/BV19b4y1o7Lt/), [Rust Project: xdiff](https://www.bilibili.com/video/BV1dG4y167M9/), [xdiff github](https://github.com/Tubitv/xdiff), [Rust Project: reservation](https://www.bilibili.com/video/BV1aV4y1L72b/); 
 
   [Learn Rust Programming - Complete Course (freeCodeCamp.org)](https://www.youtube.com/watch?v=BpPEoZW5IiY); 
-
+  
   [50 Rust Projects](https://www.youtube.com/watch?v=qru3L4BvrOU&list=PL5dTjWUk_cPYuhHm9_QImW7_u4lr5d6zO), [50 source code](https://github.com/AkhilSharma90/Rust-Compress); 
-
-  [基于rust语言的小项目](https://www.bilibili.com/video/BV1v64y1R7mq/)
+  
+  [基于rust语言的小项目](https://www.bilibili.com/video/BV1v64y1R7mq/), 
+  
+  [Rust Seminar (TenXun)](https://www.bilibili.com/video/BV1wZ421e7Zh/), 
 
 
 

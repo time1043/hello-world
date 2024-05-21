@@ -20,6 +20,12 @@
   
 - Reference - course
 
+  [NoSQL Database Tutorial – Full Course for Beginners (freeCodeCamp.org)](https://www.youtube.com/watch?v=xh4gy1lbL2k), 
+  
+  [ElasticSearch bobo](https://www.bilibili.com/video/BV1FL411D7Xp/), 
+  
+  [PostgreSQL Tutorial for Beginners (freeCodeCamp.org)](https://www.youtube.com/watch?v=SpfIwlAYaKk), 
+  
   [PostgreSQL for everyone (bilibili)](https://www.bilibili.com/video/BV1tj421U7GK/), 
   
   python for everyone、django for everyone、web applications for everyone
@@ -580,7 +586,7 @@
 
 
 
-
+# ElasticSearch
 
 
 

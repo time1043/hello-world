@@ -128,7 +128,7 @@
 
 
 
-### e
+### /e
 
 - /e/book (pan.baidu synchronization)
 
@@ -142,7 +142,7 @@
 
 
 
-### d
+### /d/code2
 
 - dir (json yaml?)
 
@@ -198,6 +198,12 @@
   
   ```
 
+  
+
+
+
+### /d/code2
+
 - `/d/soft/` (software)
 
   /d/soft/social (`QQ`, `weChat`)
@@ -212,7 +218,13 @@
 
   /d/soft/tool (`7z`, `Everything`, `geek`, `Snipaste`, `Reduce Memory`, DeskPins, utool, SpaceSniffer)
 
-  /d/soft/help (`Clash`, v2, Win, chromedriver-win64)
+  /d/soft/help (`Clash`, v2, Win)
+
+  
+
+
+
+### /d/devenv/
 
 - `/d/DockerContainers` 
 
@@ -227,6 +239,8 @@
   /d/devenv/apache-maven-3.8.1; /d/devenv/miniconda3
 
   /d/devenv/scala; /d/devenv/java; /d/devenv/go; /d/devenv/nvm, /d/devenv/nodejs; /d/devenv/texlive
+
+  /d/devenv/help (`protoc-25.0-win64`, `chromedriver-win64`)
 
   /d/devenv/bigdata-package (...)
 
@@ -305,7 +319,29 @@
 
 
 
+### git 
+
+- git 集成到 terminal 中
+
+- git 支持扩展命令
+
+  tree, [make](https://sourceforge.net/projects/ezwinports/files/),  
+
+
+
+
+
+
+
+
+
 ### Docker
+
+
+
+
+
+### vscode
 
 
 
@@ -615,6 +651,47 @@
 ### golang
 
 #### go
+
+- scoop 安装 go
+
+  ```bash
+  # win scoop
+  scoop search go
+  scoop install go@1.20.12
+  scoop uninstall go
+  
+  # linux
+  tar -C /usr/local -xzf go1.15.5.linux-amd64.tar.gz
+  # PATH
+  
+  
+  go env
+  go env -w GO111MODULE=on
+  go env -w GOPROXY=https://goproxy.cn,direct
+  
+  go mod init helloworld  # go.mod
+  
+  
+  go help module-get
+  go help gopath-get
+  
+  go get golang.org/x/text@latest  # 拉取最新的版本(优先择取 tag)
+  go get golang.org/x/text@master  # 拉取 master 分支的最新 commit
+  go get golang.org/x/text@v0.3.2  # 拉取 tag 为 v0.3.2 的 commit
+  go get golang.org/x/text@342b2e  # 拉取 hash 为 342b231 的 commit
+  
+  go get -u  # 更新现有的依赖
+  go mod download  # 下载 go.mod 文件中指明的所有依赖
+  go mod tidy  # 整理现有的依赖
+  go mod graph  # 查看现有的依赖结构
+  
+  go mod edit  # 编辑 go.mod 文件
+  go mod vendor  # 导出现有的所有依赖 (淡化)
+  go mod verify  # 校验一个模块是否被篡改过
+  
+  ```
+
+  
 
 
 

@@ -6,9 +6,15 @@
 
 - Reference - course
 
-  [React Brief Course (HDAlex_John bilibili)](https://www.bilibili.com/video/BV1qK421x79b/?), [React Brief Course (github)](https://github.com/13RTK/React-Concise-Course)
+  [React Brief Course (bilibili)](https://www.bilibili.com/video/BV1qK421x79b/?), [React Brief Course (github)](https://github.com/13RTK/React-Concise-Course), 
 
-- Reference - recommend
+  [React Project!!!](https://www.bilibili.com/video/BV1Z34y1A7Tn/), 
+
+  [React Chat App Full Tutorial 2024 | Realtime Chat Application Project with Firebase (Lama Dev)](https://www.youtube.com/watch?v=domt_Sx-wTY), [fireship-io / react-firebase-chat](https://github.com/fireship-io/react-firebase-chat), [safak / react-firebase-chat](https://github.com/safak/react-firebase-chat), 
+
+  [VS Code Tutorial – Become More Productive (freeCodeCamp.org)](https://www.youtube.com/watch?v=heXQnM99oAI), 
+
+  Reference - recommend
 
   [Fullstack React](https://www.bilibili.com/video/BV1JC4y1H7jv/), 
 
@@ -44,6 +50,19 @@
 
 
 
+- go 格式化 保存时优化导入
+
+  settings.json 
+
+  ```json
+    "[go]": {
+      "editor.defaultFormatter": "golang.go"
+    },
+    "editor.codeActionsOnSave": { "source.organizeImports": true },
+  ```
+
+  
+
 
 
 
@@ -77,6 +96,14 @@
 
 
 
+
+
+
+
+
+## Bootstrap
+
+- 参考：[bootstrap官网](https://getbootstrap.com/)、[bootstrap3.4.1](https://getbootstrap.com/docs/3.4/components/)
 
 
 

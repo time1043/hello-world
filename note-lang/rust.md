@@ -32,6 +32,1048 @@
 
 
 
+# Rust (WordScenesTV)
+
+- Rust编译器
+
+  被Rust编译器支配
+
+  早期指出潜在的错误，并精确指出问题所在 
+
+  (否则像其他语言 出问题 去追踪为什么数据不是你认为的样子)
+
+
+
+
+
+## 所有权
+
+- Overship
+
+- Ownership
+
+  Rust 最独特的特性之一
+
+  无需垃圾收集器 即可保证内存安全
+
+- 所有权的影响
+
+  对语言其他部分有深远影响
+
+  影响内存管理 性能 和安全性
+
+- 相关特性
+
+  Borrowing：临时访问他人拥有的值
+
+  Slices：对数组或集合的一部分进行访问
+
+  内存布局：Rust如何在内存中布局数据
+
+  
+
+
+
+### 所有权 初识
+
+- 什么是 所有权
+
+- 所有权规则 Ownership rules
+
+  Rust 通过一套规则管理内存
+
+  编译器检查这些规则 以确保内存安全
+
+- 内存管理方式 (不同语言的实现方案)
+
+  垃圾收集：自动寻找不再使用的内存 (java python)
+
+  手动管理：开发者负责分配和释放内存 (c)
+
+  所有权机制：通过所有权规则 在编译时管理内存 (rust)
+
+- 所有权的优势
+
+  程序运行时 不会因所有权特性而变慢 (零成本)
+
+  确保内存安全 防止悬垂指针 防止数据竞争
+
+  
+
+---
+
+- 所有权规则概述
+
+  单一所有权：每个值(value) 在rust中都有一个所有者(owner)
+
+  唯一所有权：在任何给定时间点 只能有一个所有者
+
+  自动内存释放：当所有者超出作用域(out of scope) 值(value)将被丢弃(dropped)
+
+- demo1: 变量的作用域
+
+  ```rust
+  {                                   // s 在这里无效 还没被声明
+      let s = "hello world";    	    // s 在这里有效 声明了
+      // s do ...
+  }                                   // s 已经不再有效 已经被释放    
+  ```
+
+- demo2: String类型
+
+  ```rust
+  fn main() {
+      // 字符串字面量 &str (快速高效 但不可变的 如常量枚举值；)
+      let _s: &str = "hello world";  // 编译时就知道内容 文本直接硬编码到最终的可执行文件中
+      
+      // String类型 (可以存储编译时未知的文本量)
+      let _s = String::from("hello"); // 在堆上分配内存 
+      // java: gc 回收清理不再使用的内存
+      // c: 手动释放内存 (忘记了 则浪费内存；过早释放 则存在无效变量；两次释放 ...)
+      // rust: 拥有其所有权的变量 离开作用域(rust调用.drop()) 自动释放内存
+  
+      let mut s = String::from("hello");
+      s.push_str(", world!");  // 模拟获取用户输入 并存储
+      println!("{}", s);
+  }
+  ```
+
+  
+
+
+
+
+---
+
+- 赋值会发生所有权的移动 (有条件的)
+
+  区别于浅拷贝的 move (避免两次释放内存)
+
+  默认浅拷贝 性能低成本
+
+  ```rust
+  fn main() {
+      // 整数 在编译时 是具有已知固定大小的简单值 [栈]
+      // 副本制作起来非常快 没有理由在堆上那么做 (所谓的深拷贝浅拷贝没有区别)
+      let x = 5;
+      let _y = x;
+  
+      // String (栈上指针 堆上数据)
+      // [栈] s1 {ptr: xxo, len: 5, capacity: 5}
+      // [栈] s2 {ptr: xxo, len: 5, capacity: 5} - 复制指针长度容量 不复制数据 (类似浅拷贝 但有区别: rust会使第一个变量失效 称之为move)
+      // [堆] xx0 {index[0]: h, index[1]: e, index[2]: l, index[3]: l, index[4]: o}
+      let s1 = String::from("hello");
+      let _s2 = s1; // 为了避免 双重释放错误 (rust认为 s1不再有效 s1超出作用域不需要释放任何东西)
+      println!("{}, world!", s1);  // err: value borrowed here after move (不会通过编译)
+  }
+  ```
+
+  复制堆数据 开销较大 (深拷贝)  `.clone()` 
+
+  ```rust
+  fn main() {
+      let s1 = String::from("hello");
+      let s2 = s1.clone();
+      println!("s1: {}, s2: {}", s1, s2);
+  }
+  ```
+
+  注解 `copy trait` (放置栈上存储的类型上) ???
+
+  一个类型实现了 `copy trait`，使用他的变量不会move 而是简单复制，使得在赋值另一个变量后仍然有效
+
+  
+
+
+
+---
+
+- 函数值传递
+
+  将值传递给函数的机制 将值赋值给变量 相似 (move copy)
+
+  ```rust
+  fn main() {
+      let s = String::from("hello");      // s 开始生效
+      takes_ownership(s);             // s的值被移动到函数里 
+      // println!("{}", s);               // s 不再有效
+  
+      let x = 5;                          // x 开始生效
+      makes_copy(x);             		 // x的值被复制到函数里
+      println!("{}", x);                      // x 仍然有效
+  }  // x超出作用域失效 s被移动了 对于s什么都没发生
+  
+  fn takes_ownership(some_string: String) {  // some_string 开始生效
+      println!("{}", some_string);          
+  }  // some_string超出作用域 rust自动调用drop() 内存被回收
+  
+  fn makes_copy(some_integer: i32) {  // some_integer 开始生效
+      println!("{}", some_integer);  
+  }  // some_integer超出作用域 操作系统自动收回栈内存 rust无需任何处理
+  ```
+
+  函数返回值
+
+  ```rust
+  fn main() {
+      let s1 = gives_ownership();  // 函数把返回值所有权 绑定到s1
+      let s2 = String::from("hello");  // s2 开始生效
+      let s3 = takes_and_gives_back(s2);  // s2 被移动到函数中 函数把返回值移动到s3
+  }  // s3超出作用域被drop s2被移动不需要处理 s1超出作用域被drop
+  
+  fn gives_ownership() -> String {
+      let some_string = String::from("world");  // some_string 开始生效
+      some_string     // some_string (所有权) 被返回并移动给调用者
+  }
+  
+  fn takes_and_gives_back(a_string: String) -> String {  // a_string 开始生效
+      a_string  // a_string (所有权) 被返回并移动给调用者
+  }
+  ```
+
+  
+
+
+
+- 所有权的两次转移 (rust允许我们通过元组返回多个值)
+
+  ```rust
+  fn main() {
+      let s1 = String::from("hello");
+      let (s2, len) = calculate_length(s1);
+      println!("The length of '{}' is {}.", s2, len);
+  }
+  
+  fn calculate_length(s: String) -> (String, usize) {
+      let len = s.len();
+      (s, len)
+  }
+  ```
+
+  
+
+
+
+### 引用 和借用
+
+- Reference: 不转移所有权 仅使用值
+
+  创建引用的过程 称为借用(borrow)
+
+  引用 类似指针 一个可以跟随的地址 (可访问该地址上的数据)  `&s1`  `&String`
+
+  ```rust
+  fn main() {
+      let s1 = String::from("hello");
+      let len = calculate_length(&s1);
+      println!("The length of '{}' is {}.", s1, len);
+  }
+  
+  fn calculate_length(s: &String) -> usize {  // s: &String (String类型的引用)
+      s.len()
+  }  // s超出作用域 但是没有所有权 不会被丢弃
+  
+  
+  // &s1 创建引用s 指向s1的值 但不拥有其所有权
+  
+  // s {ptr: s1}
+  // [栈] s1 {ptr: xxo, len: 5, capacity: 5}
+  // [堆] xx0 {index[0]: h, index[1]: e, index[2]: l, index[3]: l, index[4]: o}
+  
+  ```
+
+  
+
+
+
+
+- 借用 (没有所有权) 的修改值
+
+  变量默认是不可变的 引用默认也是不可变的
+
+  ```rust
+  fn main() { 
+      let s = String::from("hello");
+      change(&s);
+  }
+  
+  fn change(some_string: &String) {
+      some_string.push_str(", world!");
+  }
+  ```
+
+  可变引用 `&mut`
+
+  ```rust
+  fn main() { 
+      let mut s = String::from("hello");
+      change(&mut s);
+      println!("{}", s);
+  }
+  
+  fn change(some_string: &mut String) {
+      some_string.push_str(", world!");
+  }
+  ```
+
+  
+
+
+
+
+---
+
+
+- 可变引用的限制
+
+  ```rust
+  fn main() {
+      let mut s = String::from("hello");
+  
+      let r1 = &s;  // 没问题
+      let r2 = &s;  // 没问题
+      let r3 = &mut s;  // 大问题  cannot borrow `s` as mutable
+  
+      println!("{} {} {}", r1, r2, r3)
+  }
+  
+  // 如果对一个值拥有可变引用 不能同时拥有对该值的其他引用 
+  // 1 一个可变引用 + 一个可变引用 是不允许的
+  // 2 一个可变引用 + 一个不可变引用 是不允许的
+  
+  // 3 多个不可变引用 是允许的 (仅读)
+  
+  
+  // 总结
+  // 在任何给定时间，可以有 一个可变引用 或 任意数量的不可变引用
+  // rust编译器保证引用必须始终有效
+  ```
+
+  使得任何时候，都不能同时对同一数据，进行可变借用 
+
+  只要rust编译器能通过所有权和借用规则，即可避免数据竞争 (避免了由于并发访问 导致的未定义行为)
+
+  > 数据竞争
+  >
+  > 两个或更多的指针同时访问同一数据
+  >
+  > 至少有一个指针被用来写入数据
+  >
+  > 没有适当的同步机制来协调这些访问
+
+  可以使用`{}`创建多个可变引用 但不能同时使用
+
+- 引用的作用域 从变量被声明开始 到最后一次被使用结束
+
+  ```rust
+  fn main() {
+      let mut s = String::from("hello");
+  
+      let r1 = &s;  // 没问题
+      let r2 = &s;  // 没问题
+      println!("{} and {}", r1, r2);  // r1 r2 后续不再使用 引用作用域结束
+  
+      let r3 = &mut s;  // 没问题 (作用域没有重叠)
+      println!("{}", r3);
+  }
+  
+  ```
+
+- Rust编译器 保证引用不会成为垂悬引用 
+
+  rust编译器保证引用必须始终有效
+
+  在引用失效之前 数据不会超出作用域 
+
+  ```rust
+  fn main() {
+      let mut s = dangle();
+      println!("{}", s);
+  }
+  
+  fn dangle() -> &String {  // 垂悬引用  err: missing lifetime specifier
+      let s = String::from("hello");  // s是在函数内部创建的 函数执行完毕后 s将被销毁
+      &s  // 尝试返回对s的引用 这个引用会指向一个无效的String (rust编译器不允许)
+  }
+  
+  ```
+
+  解决1
+
+  ```rust
+  fn main() {
+      let s = no_dangle();
+      println!("{}", s);
+  }
+  
+  fn no_dangle() -> String { 
+      let s = String::from("hello"); 
+      s  // s 函数返回值 所有权转移
+  }
+  
+  ```
+
+  
+
+
+
+### 切片 slice
+
+- 切片是一种引用 (不拥有所有权)
+
+  切片允许引用集合中连续的元素序列 而不是整个集合
+
+- 任务
+
+  > 给定一个有空格分隔的词字符串，例如"dog cat applr"
+  >
+  > 编写一个函数，返回在该字符串中，找到的第一个单词
+
+- 不使用切片
+
+  返回单词 <- 返回单词的索引
+
+  ```rust
+  fn main() {
+      let mut s = String::from("hello world from the rust programming language");
+  
+      // usize 在 string 的上下文才有意义
+      let word_start = first_word(&s);
+      println!("The first word starts at index {}", word_start);
+  
+      s.clear();  // 清空s ""
+      // word_start 依然是5 但s是空的
+      // 后续尝试对s使用word_start 变量获取值会报错
+  
+  }
+  
+  fn first_word(s: &String) -> usize {
+      let bytes = s.as_bytes();  // 将字符串转化为字节数组
+  
+      // 遍历字节数组，找到第一个空格的位置
+      for (i, &item) in bytes.iter().enumerate() {  // 字节数组 迭代器 元组返回
+          if item == b' ' {  
+              return i;
+          }
+      }
+  
+      s.len()
+  }
+  ```
+
+  
+
+
+
+
+
+## 结构体
+
+### 结构体 初识
+
+
+
+
+
+
+
+### 方法
+
+
+
+
+
+
+
+## 枚举
+
+### 枚举 初识
+
+
+
+
+
+
+
+
+
+### match 模式
+
+
+
+
+
+
+
+
+
+
+
+### if let 语法
+
+
+
+
+
+
+
+
+
+
+
+## Collection
+
+### Vector
+
+
+
+
+
+
+
+
+
+
+
+### String 
+
+
+
+
+
+
+
+### HashMap
+
+
+
+
+
+
+
+
+
+## 异常处理
+
+### panic!
+
+
+
+
+
+
+
+
+
+
+
+### 错误修复
+
+
+
+
+
+
+
+## 泛型 trait 生命周期
+
+- Overview
+
+  提取函数；泛型函数；泛型结构体 泛型枚举 
+
+  trait 以泛型方式定义行为；约束泛型 仅接收具有某特定行为的类型
+
+  生命周期 一种泛型 向编译器提供了引用如何相互关联的信息
+
+  
+
+
+
+### genericity
+
+- 介绍
+
+  目的：处理概念的重复 (泛型)
+
+  泛型：具体类型 或其他属性 的抽象代表
+
+  使用泛型创建函数签名 结构体 枚举 方法的定义
+
+- Summary
+
+  函数体 对抽象列表 (而不是具体值) 进行操作
+
+  泛型 对抽象类型 进行操作
+
+  
+
+
+
+#### 提取函数
+
+- 任务：
+
+  > 计算一组数的最大值
+  >
+  > 两组
+  >
+  > 两组 不同类型 (i32 char)
+
+  计算一组数的最大值
+
+  ```rust
+  fn main() {
+      let number_list = vec![34,20,64,12,56,87,23,90];
+      let mut largest = &number_list[0];
+  
+      for number in number_list.iter() {
+          if number > largest {
+              largest = number;
+          }
+      }
+  
+      println!("The largest number is: {}", largest);
+  }
+  
+  ```
+
+  两组 (复制代码 繁琐易出错 多个地方更新)
+
+  ```rust
+  fn main() {
+      let number_list = vec![34,20,64,12,56,87,23,90];
+      let mut largest = &number_list[0];
+  
+      for number in number_list.iter() {
+          if number > largest {
+              largest = number;
+          }
+      }
+  
+      println!("The largest number is: {}", largest);
+  
+      // --------------------------------------------------------------------------------------------------
+      let number_list = vec![43,87,233,12,56,87,223,79];
+      let mut largest = &number_list[0];
+  
+      for number in number_list.iter() {
+          if number > largest {
+              largest = number;
+          }
+      }
+  
+      println!("The largest number is: {}", largest);
+  }
+  
+  ```
+
+  
+
+
+
+---
+
+- 提取函数 抽象出相同的逻辑 (减少代码重复)
+
+  识别重复代码
+
+  重复代码抽象到函数体中，函数签名 (输入参数 返回值)
+
+  两个实例 调用函数
+
+  ```rust
+  fn get_largest(list: &[i32]) -> &i32 {
+      let mut largest = &list[0];
+  
+      for number in list.iter() {
+          if number > largest {
+              largest = number;
+          }
+      }
+  
+      largest
+  }
+  
+  fn main() {
+      let number_list = vec![34,20,64,12,56,87,23,90];
+      let largest = get_largest(&number_list);
+      println!("The largest number is: {}", largest);
+  
+      let number_list = vec![43,87,233,12,56,87,223,79];
+      let largest = get_largest(&number_list);
+      println!("The largest number is: {}", largest);
+  }
+  
+  ```
+
+  
+
+
+
+#### 泛型函数
+
+- 任务：在i32切片 char切片中 找到最大值 
+
+  两个函数的函数体逻辑相同 只是函数签名不同
+
+  ```rust
+  fn get_largest_i32(list: &[i32]) -> &i32 {
+      let mut largest = &list[0];
+  
+      for number in list.iter() {
+          if number > largest {
+              largest = number;
+          }
+      }
+  
+      largest
+  }
+  
+  fn get_largest_char(list: &[char]) -> &char {
+      let mut largest = &list[0];
+  
+      for letter in list.iter() {
+          if letter > largest {
+              largest = letter;
+          }
+      }
+  
+      largest
+      
+  }
+  
+  fn main() {
+      let numbers = [10, 20, 323, 40, 50];
+      let largest_number = get_largest_i32(&numbers);
+      println!("The largest number is: {}", largest_number);
+  
+      let letters = ['a', 'b', 'c', 'x', 'e'];
+      let largest_letter = get_largest_char(&letters);
+      println!("The largest letter is: {}", largest_letter);
+  }
+  
+  ```
+
+  
+
+
+
+---
+
+- 泛型函数 (代表多种类型的占位符 减少代码重复)
+
+- 对类型进行参数化 声明类型参数名称 `get_largest<T>(list: &[T]) -> &T {}` 
+
+  解释：函数 get_largest 是泛型的，适用于某种类型 `T`，函数有参数 `list: &[T]`，函数返回值 `&T`
+
+- 泛型是不能比较大小的 -> 加约束 `get_largest<T: std::cmp::PartialOrd>` 
+
+  Rust 编译器甚至教我怎么改!!!
+
+  ```rust
+  #[allow(unused)]
+  fn get_largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
+      let mut largest = &list[0];
+  
+      for item in list.iter() {
+          if item > largest {  
+              largest = item;
+          }
+      }
+  
+      largest
+  }
+  
+  fn main() {
+      let numbers = [10, 20, 323, 40, 50];
+      let largest_number = get_largest(&numbers);
+      println!("The largest number is: {}", largest_number);
+  
+      let letters = ['a', 'b', 'c', 'x', 'e'];
+      let largest_letter = get_largest(&letters);
+      println!("The largest letter is: {}", largest_letter);
+  }
+  
+  ```
+
+  
+
+
+
+#### 结构体 枚举 的泛型
+
+- 泛型结构体 `struct Point<T>`
+
+  ```rust
+  #[allow(unused)]
+  struct Point<T> {
+      x: T,
+      y: T,
+  }
+  
+  fn main() {
+      let integer = Point { x: 5, y: 10 };
+      let float = Point { x: 1.0, y: 4.0 };
+      println!("integer.x = {}, integer.y = {}", integer.x, integer.y);
+      println!("float.x = {}, float.y = {}", float.x, float.y);
+  
+      let integer_float = Point { x: 5, y: 4.0 };  // error: mismatched types
+      println!("integer_float.x = {}, integer_float.y = {}", integer_float.x, integer_float.y);
+  }
+  ```
+
+  多个泛型参数 (使用更多就忘了初衷 需要重构) `struct Point<T,U>`
+
+  ```rust
+  #[allow(unused)]
+  struct Point<T,U> {
+      x: T,
+      y: U,
+  }
+  
+  fn main() {
+      let integer_float = Point { x: 5, y: 4.0 }; 
+      println!("integer_float.x = {}, integer_float.y = {}", integer_float.x, integer_float.y);
+  }
+  ```
+
+  
+
+
+---
+
+- 结构体实现 泛型方法 `impl<T>`
+
+  ```rust
+  #[allow(unused)]
+  struct Point<T> {
+      x: T,
+      y: T,
+  }
+  
+  // 结构体实现 泛型方法
+  impl<T> Point<T> {
+      fn x(&self) -> &T {
+          &self.x
+      }
+      fn y(&self) -> &T {
+          &self.y
+      }
+  }
+  
+  fn main() {
+      let p = Point { x: 1, y: 2 };
+      println!("x: {}", p.x());
+      println!("y: {}", p.y());
+  
+      let q = Point { x: 3.14, y: 2.71 };
+      println!("x: {}", q.x());
+      println!("y: {}", q.y());
+  }
+  ```
+
+  定义类型的方法 约束泛型 `impl Point<f32>`
+
+  ```rust
+  #[allow(unused)]
+  struct Point<T> {
+      x: T,
+      y: T,
+  }
+  
+  // 定义方法时 对泛型约束 (只对 Point<f32> 实现方法)
+  impl Point<f32> {
+      fn distance(&self) -> f32 {
+          (self.x.powi(2) + self.y.powi(2)).sqrt()
+      }
+  }
+  
+  fn main() {
+      let p = Point { x: 3.0, y: 4.0 };
+      println!("distance = {}", p.distance());
+  
+      let q = Point { x: 5, y: 6 };
+      // q.distance(); // 不能调用 distance 方法，因为泛型约束只对 Point<f32> 实现
+  }
+  ```
+
+  定义类型的方法 声明不同的泛型 
+  
+  泛型参数 在impl后声明`impl<X1,Y1>` (与结构体定义相关)
+  
+  泛型参数 在方法定义中声明`fn mixup<X2,Y2>` (只有该方法相关)
+  
+  ```rust
+  struct Point<X1,Y1> {
+      x: X1,
+      y: Y1,
+  }
+  
+  impl<X1,Y1> Point<X1,Y1> {
+      fn mixup<X2,Y2>(self, other: Point<X2,Y2>) -> Point<X1,Y2> {
+          Point {x: self.x, y: other.y}
+      }
+  }
+  
+  fn main() {
+      let p1 = Point {x: 1.2, y: 2.3};
+      let p2 = Point {x: "hello", y:'c'};
+  
+      let p3 = p1.mixup(p2);
+      print!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+  }
+  ```
+  
+  
+
+
+
+---
+
+- 泛型枚举
+
+  ```rust
+  // 表达可选值 的抽象概念 (无论可选值的类型是什么)
+  #[allow(unused)]
+  enum Option<T> {
+      Some(T),
+      None,
+  }
+  
+  // 表达错误值 的抽象概念 (任何可能成功和失败的操作 都可以返回 Result<T, E>)
+  #[allow(unused)]
+  enum Result<T, E> {
+      Ok(T),
+      Err(E),
+  }
+  
+  fn main() {
+      
+  }
+  ```
+
+  
+
+
+
+#### 泛型的花销
+
+- 运行成本？零成本 
+
+  使用泛型的程序 不会比 使用具体类型的 运行更慢
+
+  Rust 在编译时 对使用泛型的代码单态化 (填充具体类型)
+
+  
+
+
+
+### trait 
+
+- 介绍
+
+  允许定义共享行为 为不同类型提供统一接口 
+
+  在泛型代码中 使用trait
+
+- 类似其他语言的 interface (但有差异)
+
+  
+
+
+
+- trait定义：将方法签名组合在一起 (以定义一组完成某些目的 所必须的行为)
+
+  ```rust
+  // 新闻
+  pub struct NewArticle {
+      pub headline: String,
+      pub location: String,
+      pub author: String,
+      pub content: String,
+  }
+  
+  // 推文
+  pub struct Tweet {
+      pub username: String,
+      pub content: String,
+      pub reply: bool,
+      pub retweet: bool,
+  }
+  
+  
+  // 摘要 trait
+  pub trait Summary {
+      fn summarize(&self) -> String {  // 也可以不实现默认 抽象方法交给子类去实现
+          String::from("Read more...")
+      }
+  }
+  
+  // 实现 Summary trait 的 NewArticle
+  impl Summary for NewArticle {
+      fn summarize(&self) -> String {
+          format!("{}, {} by ({})", self.headline, self.author, self.location)
+      }
+  }
+  
+  // 实现 Summary trait 的 Tweet (未实现 使用默认的)
+  impl Summary for Tweet {
+      // fn summarize(&self) -> String {
+      //     format!("{}: {}", self.username, self.content)
+      // }
+  }
+  
+  
+  fn main() {
+      let tweet = Tweet {
+          username:String::from("Rustacean"),
+          content: String::from("Hello, world!"),
+          reply: false,
+          retweet: false,
+      };
+  
+      let article = NewArticle {
+          headline: "My First Rust Article".to_string(),
+          location: "Rust News".to_string(),
+          author: "John Doe".to_string(),
+          content: "This is my first article about Rust programming language.".to_string(),
+      };
+  
+      println!("Tweet summary: {}", tweet.summarize());
+      println!("Article summary: {}", article.summarize());
+  }
+  ```
+
+  
+
+
+
+- Orphan rule (孤儿原则)
+
+  确保其他人的代码 不会破坏我的代码
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Rust (yangxu)
 
 

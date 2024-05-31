@@ -1,0 +1,3 @@
+D:/code2/hello-world/code-show/c-my/hm/cmake-build-debug/CMakeFiles/hm.dir
+D:/code2/hello-world/code-show/c-my/hm/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/code2/hello-world/code-show/c-my/hm/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,4 @@
+"D:\software\JetBrains\CLion 2023.2.3\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=D:/software/JetBrains/CLion 2023.2.3/bin/ninja/win/x64/ninja.exe" -G Ninja -S D:\code2\hello-world\code-show\c-my\hm -B D:\code2\hello-world\code-show\c-my\hm\cmake-build-debug
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: D:/code2/hello-world/code-show/c-my/hm/cmake-build-debug

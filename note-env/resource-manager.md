@@ -236,9 +236,11 @@
 
   /d/devenv/git
 
-  /d/devenv/apache-maven-3.8.1; /d/devenv/miniconda3
+  /d/devenv/apache-maven-3.8.1; /d/devenv/gradle; /d/devenv/miniconda3
 
   /d/devenv/scala; /d/devenv/java; /d/devenv/go; /d/devenv/nvm, /d/devenv/nodejs; /d/devenv/texlive
+
+  /d/devenv/bigdat (`hadoop-3.1.0`, `prettyZoo`)
 
   /d/devenv/help (`protoc-25.0-win64`, `chromedriver-win64`)
 
